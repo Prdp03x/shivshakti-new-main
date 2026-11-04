@@ -1,0 +1,695 @@
+/* Print templates are isolated from the interactive application UI. */
+.print-target-bill,
+.print-target-ledger,
+.print-target-transaction-report {
+  display: none;
+}
+@page {
+  margin: 8mm 10mm;
+}
+@page printA4 {
+  size: A4 portrait;
+  margin: 8mm 10mm;
+}
+@page printA5 {
+  size: A5 portrait;
+  margin: 8mm 10mm;
+}
+
+@media print {
+  html,
+  body,
+  #root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  body {
+    background: transparent !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .app-shell,
+  .app-main {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  .no-print,
+  .print\\:hidden {
+    display: none !important;
+  }
+  .print-only,
+  .print\\:block {
+    display: block !important;
+  }
+  table {
+    border-collapse: collapse !important;
+    width: 100%;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tfoot {
+    display: table-row-group;
+  }
+  tr,
+  img {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .max-h-\[62vh\],
+  .overflow-auto,
+  .overflow-x-auto,
+  .overflow-y-auto {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body[data-print-size="A5"] .print-target-records,
+  body[data-print-size="A5"] .print-target-page {
+    page: printA5;
+  }
+  body[data-print-target] * {
+    visibility: hidden !important;
+  }
+  body[data-print-target="records"] .print-target-records,
+  body[data-print-target="records"] .print-target-records *,
+  body[data-print-target="page"] .print-target-page,
+  body[data-print-target="page"] .print-target-page *,
+  body[data-print-target="bill"] .print-target-bill,
+  body[data-print-target="bill"] .print-target-bill *,
+  body[data-print-target="ledger"] .print-target-ledger,
+  body[data-print-target="ledger"] .print-target-ledger *,
+  body[data-print-target="purchase-report"] .print-target-purchase-report,
+  body[data-print-target="purchase-report"] .print-target-purchase-report *,
+  body[data-print-target="sale-report"] .print-target-sale-report,
+  body[data-print-target="sale-report"] .print-target-sale-report * {
+    visibility: visible !important;
+  }
+
+  body[data-print-target="records"] .print-target-records,
+  body[data-print-target="page"] .print-target-page,
+  body[data-print-target="bill"] .print-target-bill,
+  body[data-print-target="ledger"] .print-target-ledger,
+  body[data-print-target="purchase-report"] .print-target-purchase-report,
+  body[data-print-target="sale-report"] .print-target-sale-report {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+
+  .print-target-records table {
+    min-width: 0 !important;
+    font-size: 8pt !important;
+  }
+  .print-target-records th,
+  .print-target-records td {
+    padding: 4px 5px !important;
+    border: 1px solid #b8b8b8 !important;
+    color: #000 !important;
+    white-space: normal !important;
+  }
+  .print-target-records th {
+    background: #e9edf2 !important;
+    font-weight: 700 !important;
+  }
+  .print-target-records tfoot {
+    background: #edf0f3 !important;
+    font-weight: 700 !important;
+  }
+
+  /* A4 multi-page ledger statement, matching the supplied statement sample. */
+  .print-target-ledger {
+    width: 100% !important;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000 !important;
+  }
+  .ledger-print-sheet {
+    width: 100%;
+    min-height: 275mm;
+    display: flex;
+    flex-direction: column;
+    break-after: page;
+    page-break-after: always;
+    background: #fff;
+  }
+  .ledger-print-sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  .bill-nowrap {
+    white-space: nowrap;
+  }
+  .ledger-print-company {
+    text-align: center;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    border-bottom: 2px solid #000;
+  }
+  .ledger-print-company h1 {
+    margin: 0;
+    font-size: 12pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .ledger-print-company p {
+    margin: 3px 0 0;
+    font-size: 7.5pt;
+  }
+  .ledger-print-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #000;
+    font-size: 8pt;
+  }
+  .ledger-print-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ledger-print-meta-right {
+    text-align: right;
+  }
+  .ledger-print-table {
+    width: 100%;
+    border-collapse: collapse !important;
+    table-layout: fixed;
+    font-size: 7.5pt;
+  }
+  .ledger-print-table th {
+    text-align: left;
+    font-size: 7.5pt;
+    font-weight: 700;
+    border-bottom: 1px solid #000;
+    padding: 5px 3px !important;
+  }
+  .ledger-print-table td {
+    padding: 3px 3px !important;
+    vertical-align: top;
+  }
+  /* .ledger-print-table tbody tr { border-bottom: .35px solid #bbb; } */
+  .ledger-date {
+    width: 15%;
+  }
+  .ledger-type {
+    width: 0%;
+    text-align: center !important;
+  }
+  .ledger-voucher {
+    width: 12%;
+  }
+  .ledger-amount {
+    width: 23%;
+    text-align: right !important;
+  }
+  .ledger-balance {
+    width: 17%;
+    text-align: right !important;
+  }
+  .ledger-number {
+    text-align: right !important;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .ledger-center {
+    text-align: center !important;
+  }
+  .ledger-nowrap {
+    white-space: nowrap;
+  }
+  .ledger-strong {
+    font-weight: 700;
+  }
+  .ledger-opening-row {
+    font-weight: 700;
+  }
+  .ledger-page-total {
+    border-top: 1px solid #000;
+    font-weight: 700;
+  }
+  .ledger-page-total td,
+  .ledger-closing-row td {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+  .ledger-page-total td:first-child,
+  .ledger-closing-row td:first-child {
+    text-align: right;
+    padding-right: 8px !important;
+  }
+  .ledger-closing-row {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    font-weight: 800;
+  }
+  .ledger-print-footer {
+    margin-top: auto;
+    padding-top: 5px;
+    font-size: 6.5pt;
+    text-align: right;
+    color: #555;
+  }
+}
+
+@media print {
+  body[data-print-size="A5"] .print-target-records table,
+  body[data-print-size="A5"] .print-target-page table {
+    font-size: 7.5pt !important;
+  }
+  body[data-print-size="A5"] .print-target-records th,
+  body[data-print-size="A5"] .print-target-records td,
+  body[data-print-size="A5"] .print-target-page th,
+  body[data-print-size="A5"] .print-target-page td {
+    padding: 3px 4px !important;
+  }
+  /* body[data-print-size="A5"] .bill-print {
+    min-height: 194mm !important;
+    font-size: 8pt;
+  }
+  body[data-print-size="A5"] .bill-company-header h1 {
+    font-size: 13pt;
+  }
+  body[data-print-size="A4"] .bill-print {
+    max-width: 190mm !important;
+    min-height: 275mm !important;
+  } */
+}
+
+/* =========================================
+   SHIVSHAKTI CASH MEMO - A5 PRINT LAYOUT
+========================================= */
+
+@media print {
+  /* A5 sheet */
+  .bill-print {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+
+    width: 100% !important;
+    max-width: 138mm !important;
+
+    height: 194mm !important;
+    min-height: 194mm !important;
+
+    box-sizing: border-box !important;
+    padding: 2mm !important;
+    margin: 0 auto !important;
+
+    border: 1px solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 9pt !important;
+
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .bill-print:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  /* Header */
+  .bill-company-header {
+    text-align: center !important;
+    padding: 2mm 1mm 2mm !important;
+    margin: 0 0 2mm !important;
+    border-bottom: 2px solid #000 !important;
+  }
+
+  .bill-company-header h1 {
+    margin: 0 !important;
+    font-size: 14pt !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.4px !important;
+    text-transform: uppercase !important;
+  }
+
+  .bill-company-header p {
+    margin: 1mm 0 0 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Party and bill information */
+  .bill-info {
+    display: flex !important;
+    min-height: 23mm !important;
+    padding-bottom: 2mm !important;
+    margin-bottom: 1mm !important;
+    border-bottom: 1px solid #000 !important;
+    font-size: 8.5pt !important;
+  }
+
+  .bill-party-block {
+    flex: 1 !important;
+    padding: 0 2mm !important;
+    /* border-right: 1px solid #000 !important; */
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 2mm !important;
+  }
+
+  .bill-document-title {
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .bill-party-name {
+    display: block !important;
+    margin-top: 1mm !important;
+    font-weight: 600 !important;
+    line-height: 1;
+  }
+
+  .bill-number-block {
+    width: 43mm !important;
+    flex: 0 0 43mm !important;
+    padding: 0 2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: end;
+    gap: 2mm !important;
+    text-align: left !important;
+  }
+
+  .bill-number-block div {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1mm !important;
+  }
+
+  .bill-number-block div > .bill-date-time {
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  /* Table must occupy all remaining page height */
+  .bill-table-wrap {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    margin: 1mm 0 0 !important;
+  }
+
+  .bill-items {
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .bill-items th,
+  .bill-items td {
+    border-right: 1px solid #000 !important;
+    padding: 1.4mm 1mm !important;
+    font-size: 7.5pt !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    line-height: 1;
+  }
+
+  .bill-items th:last-child,
+  .bill-items td:last-child {
+    border-right: 0 !important;
+  }
+
+  .bill-items thead th {
+    border-bottom: 1px solid #000 !important;
+    border-top: 1px solid #000 !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    vertical-align: middle; /* Vertical centering */
+    text-align: center; /* Horizontal centering */
+  }
+
+  .bill-sr-col {
+    width: 5% !important;
+    text-align: center !important;
+  }
+
+  .bill-items th:nth-child(2) {
+    width: 30% !important;
+  }
+
+  .bill-note-col {
+    width: 19% !important;
+  }
+
+  .bill-qty-col {
+    width: 9% !important;
+    text-align: right !important;
+  }
+
+  .bill-price-col {
+    width: 16% !important;
+    text-align: right !important;
+  }
+
+  .bill-total-col {
+    width: 16% !important;
+    text-align: right !important;
+    line-height: 1;
+  }
+
+  .bill-center {
+    text-align: center !important;
+  }
+
+  .bill-number {
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  /* Override bill-number specifically for center-number cells */
+  .bill-items td.center-number {
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-size: 8.5pt !important;
+  }
+
+  .bill-item-name {
+    font-weight: 600 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .bill-note {
+    font-size: 7pt !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* Stretch the empty row to fill the table */
+  .bill-filler-row {
+    height: 100% !important;
+  }
+
+  .bill-filler-row td {
+    height: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Total */
+  .bill-items tfoot td {
+    border-top: 1px solid #000 !important;
+    padding: 0mm 1.5mm !important;
+    font-size: 9pt !important;
+    font-weight: 700 !important;
+    vertical-align: middle !important;
+  }
+
+  .bill-grand-total-label {
+    text-align: right !important;
+    padding-right: 3mm !important;
+  }
+
+  /* Footer */
+  .bill-bottom-area {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 3mm !important;
+    padding: 2mm 1mm 1mm !important;
+  }
+
+  .bill-terms {
+    font-size: 7pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .bill-terms strong {
+    display: block !important;
+    margin-bottom: 1mm !important;
+  }
+
+  .bill-terms p {
+    margin: 0 !important;
+  }
+
+  .bill-signature {
+    width: 43% !important;
+    text-align: center !important;
+    font-size: 7pt !important;
+  }
+
+  .bill-stamp {
+    height: 12mm !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #777 !important;
+  }
+
+  .bill-signature-line {
+    border-top: 1px solid #000 !important;
+    padding-top: 1mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1mm !important;
+  }
+
+  .bill-next-page {
+    border-top: 1px solid #000 !important;
+    text-align: right !important;
+    font-size: 7pt !important;
+    padding: 2mm !important;
+  }
+}
+
+
+/* Dedicated compact purchase and sale register print layouts. */
+@media print {
+  .print-target-transaction-report {
+    display: block !important;
+    width: 100% !important;
+    color: #000 !important;
+    background: #fff !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 8.5pt !important;
+  }
+
+  .transaction-report-header {
+    text-align: center;
+    padding-bottom: 7px;
+    margin-bottom: 9px;
+    border-bottom: 2px solid #172b45;
+  }
+  .transaction-report-header h1 {
+    margin: 0;
+    color: #172b45;
+    font-size: 15pt;
+    font-weight: 800;
+    letter-spacing: .35px;
+    text-transform: uppercase;
+  }
+  .transaction-report-header p {
+    margin: 3px 0 7px;
+    font-size: 7.5pt;
+  }
+  .transaction-report-header h2 {
+    margin: 0;
+    font-size: 11pt;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+  .transaction-report-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 7.5pt;
+  }
+  .transaction-report-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8pt !important;
+  }
+  .transaction-report-table thead {
+    display: table-header-group !important;
+  }
+  .transaction-report-table th,
+  .transaction-report-table td {
+    border: 1px solid #8d98a6 !important;
+    padding: 5px 6px !important;
+    color: #000 !important;
+    vertical-align: middle;
+  }
+  .transaction-report-table th {
+    background: #e8edf3 !important;
+    font-weight: 700 !important;
+    text-align: left;
+  }
+  .transaction-report-table tbody tr:nth-child(even) {
+    background: #f7f9fb !important;
+  }
+  .transaction-report-table tfoot {
+    display: table-row-group !important;
+    font-weight: 800 !important;
+    background: #edf1f5 !important;
+  }
+  .report-center { text-align: center !important; }
+  .report-number { text-align: right !important; white-space: nowrap; }
+  .report-nowrap { white-space: nowrap; }
+  .report-total-label { text-align: right !important; }
+  .report-empty { text-align: center !important; padding: 14px !important; }
+
+  .transaction-report-payment-summary {
+    width: 48%;
+    margin: 14px 0 0 auto;
+    page-break-inside: avoid;
+  }
+  .transaction-report-payment-summary h3 {
+    margin: 0;
+    padding: 5px 7px;
+    border: 1px solid #8d98a6;
+    border-bottom: 0;
+    background: #e8edf3;
+    font-size: 8pt;
+    font-weight: 800;
+  }
+  .transaction-report-payment-summary table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+  }
+  .transaction-report-payment-summary td {
+    border: 1px solid #8d98a6;
+    padding: 4px 7px;
+  }
+  .report-payment-total { font-weight: 800; background: #edf1f5; }
+  .transaction-report-footer {
+    margin-top: 14px;
+    padding-top: 5px;
+    border-top: 1px solid #aab2bc;
+    color: #555;
+    font-size: 6.5pt;
+    text-align: right;
+  }
+}

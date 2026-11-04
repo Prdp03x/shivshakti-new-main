@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+build/
+**/build/
+.next/
+**/.next/
+out/
+coverage/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs and debug output
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime / temporary files
+*.pid
+*.seed
+*.pid.lock
+.tmp/
+tmp/
+temp/
+
+# Local databases and database exports
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploaded/generated local files (keep empty folders with .gitkeep)
+/uploads/
+/server/uploads/
+
+# Test and tooling caches
+.cache/
+.eslintcache
+.stylelintcache
+.vite/
+.turbo/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Package manager / tool caches
+.npm/
+.pnpm-store/
+.yarn/cache/
+
+# Optional deployment/local configuration
+.vercel/
+.netlify/
