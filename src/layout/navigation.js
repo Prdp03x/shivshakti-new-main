@@ -8,7 +8,6 @@
 
 export const navigation = [
   { id: 'dashboard', label: 'Dashboard', path: '/' },
-  { id: 'settings', label: 'Settings', path: '/settings' },
   {
     id: 'purchase',
     label: 'Purchase',
